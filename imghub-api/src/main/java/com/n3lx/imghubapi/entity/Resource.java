@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
-@Entity
+@Entity(name = "resource")
 @Table(name = "resources")
 public class Resource {
 

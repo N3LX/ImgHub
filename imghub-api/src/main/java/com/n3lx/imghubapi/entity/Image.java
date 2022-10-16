@@ -2,7 +2,7 @@ package com.n3lx.imghubapi.entity;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "image")
 @Table(name = "images")
 public class Image {
 
