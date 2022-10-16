@@ -50,7 +50,7 @@ public class FileServiceTest {
     public void testGetResourcePath() {
         Resource resource = new Resource();
         resource.setResourceName("cat.jpg");
-        assertEquals(FileService.RESOURCE_DIRECTORY + resource.getResourceName(),
+        assertEquals(FileService.RESOURCE_DIRECTORY + "/" + resource.getResourceName(),
                 fileService.getResourcePath(resource));
     }
 
@@ -65,5 +65,5 @@ public class FileServiceTest {
             directory.delete();
         }
     }
-    
+
 }

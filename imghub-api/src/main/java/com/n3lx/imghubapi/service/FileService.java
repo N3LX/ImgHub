@@ -45,7 +45,7 @@ public class FileService {
      * Provides a path to the resource relative to the application's location
      */
     public String getResourcePath(Resource resource) {
-        return RESOURCE_DIRECTORY + resource.getResourceName();
+        return RESOURCE_DIRECTORY + "/" + resource.getResourceName();
     }
 
 }
