@@ -16,6 +16,7 @@ public class Resource {
 
     private TimeZone uploadTimeZone;
 
+    @Column(unique = true)
     private String resourceName;
 
     public int getId() {
