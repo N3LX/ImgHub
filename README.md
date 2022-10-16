@@ -64,3 +64,9 @@ TEST environment also contains tests.sh that, as the name suggests, takes care o
 
 
 <br/>
+
+## Postman
+
+You will find **ImgHub-API.postman_collection.json** included in this repo, you should be able to import it into your application.
+
+Change the input files for uploading and test the API by yourself.
