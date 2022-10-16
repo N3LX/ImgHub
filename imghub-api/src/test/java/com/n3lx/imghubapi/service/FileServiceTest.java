@@ -2,7 +2,7 @@ package com.n3lx.imghubapi.service;
 
 import com.n3lx.imghubapi.entity.Resource;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,17 +26,9 @@ public class FileServiceTest {
     @Autowired
     private FileService fileService;
 
-    @BeforeEach
-    public void removeResourceDirectory() throws IOException {
-        File directory = new File(FileService.RESOURCE_DIRECTORY);
-
-        if (directory.exists()) {
-            for (File f : directory.listFiles()) {
-                f.delete();
-            }
-            directory.delete();
-        }
-
+    @BeforeAll
+    public static void prepareEnvironment() {
+        removeResourceDirectory();
     }
 
     @Test
@@ -62,4 +54,16 @@ public class FileServiceTest {
                 fileService.getResourcePath(resource));
     }
 
+    @AfterAll
+    public static void removeResourceDirectory() {
+        File directory = new File(FileService.RESOURCE_DIRECTORY);
+
+        if (directory.exists()) {
+            for (File f : directory.listFiles()) {
+                f.delete();
+            }
+            directory.delete();
+        }
+    }
+    
 }
