@@ -1,6 +1,8 @@
 package com.n3lx.imghubapi.entity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity(name = "image")
 @Table(name = "images")
@@ -14,9 +16,12 @@ public class Image {
 
     private String uploaderName;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "resource_id")
-    private Resource resource;
+    private String resourceName;
+
+    /**
+     * Hibernate is configured to store all timestamps in UTC timezone
+     */
+    private Timestamp uploadTime;
 
     public int getId() {
         return id;
@@ -42,12 +47,20 @@ public class Image {
         this.uploaderName = uploaderName;
     }
 
-    public Resource getResource() {
-        return resource;
+    public String getResourceName() {
+        return resourceName;
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public Timestamp getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(Timestamp uploadTime) {
+        this.uploadTime = uploadTime;
     }
 
 }

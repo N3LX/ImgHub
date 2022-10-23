@@ -1,7 +1,6 @@
 package com.n3lx.imghubapi.service;
 
 import com.n3lx.imghubapi.entity.Image;
-import com.n3lx.imghubapi.entity.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.TimeZone;
 
 @Service
 public class ImageService {
@@ -22,46 +21,48 @@ public class ImageService {
     @Autowired
     SessionFactory sessionFactory;
 
-    public Image save(String imageName, String uploaderName, MultipartFile mpFile) throws IOException {
-
+    public Image upload(MultipartFile multipartFile, String imageName, String uploaderName) throws IOException {
+        //Data validation
         if (imageName == null || uploaderName == null) {
-            throw new IllegalArgumentException("Image name and uploader fields cannot be null");
+            throw new NullPointerException("Image name and uploader name cannot be empty.");
         }
 
+        //Prepare new Image object
         Image image = new Image();
         image.setImageName(imageName);
         image.setUploaderName(uploaderName);
+        image.setUploadTime(Timestamp.valueOf(LocalDateTime.now()));
 
-        String resourceName = fileService.save(mpFile);
+        //Save the file via FileService
+        String resourceName = fileService.save(multipartFile, image);
+        image.setResourceName(resourceName);
 
-        Resource resource = new Resource();
-        resource.setResourceName(resourceName);
-        resource.setUploadTime(ZonedDateTime.now());
-        resource.setUploadTimeZone(TimeZone.getDefault());
-
-        image.setResource(resource);
-
+        //Save the image into database
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
-            int imageId = (Integer) session.save(image);
-            session.save(resource);
+            Integer imageId = (Integer) session.save(image);
 
             session.getTransaction().commit();
-
-            return session.get(Image.class, imageId);
+            image.setId(imageId);
         }
+
+        //Return complete Image object
+        return image;
     }
 
-    public Image get(int imageId) {
+    public Image getImageMetadata(int imageId) {
         try (Session session = sessionFactory.openSession()) {
             return session.get(Image.class, imageId);
         }
     }
 
-    public List<Image> getAll() {
+    public List<Image> getImageMetadataPage(int pageNo, int itemsPerPage) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM image", Image.class).getResultList();
+            return session.createQuery("FROM image ORDER BY upload_time ASC", Image.class)
+                    .setFirstResult((pageNo - 1) * itemsPerPage)
+                    .setMaxResults(itemsPerPage)
+                    .getResultList();
         }
     }
 

@@ -57,16 +57,12 @@ TEST environment also contains tests.sh that, as the name suggests, takes care o
 
 ### API exposes the access to database using following URLs (on port 80):
 
-| Endpoint | Description | Method | Parameter
-| :--- | :--- | :--- | :--- 
-| `/images` | Uploads an image | `POST` | N/A
-| `/images/{id}` | Accesses an image | `GET` | ID number matching the image ID in the database
+| Endpoint                                | Description                              | Method | Parameter                                                             |
+| :-------------------------------------- | :--------------------------------------- | :----- | :-------------------------------------------------------------------- |
+| `/images`                               | Uploads an image                         | `POST` | N/A                                                                   |
+| `/images/?pageNumber=1&itemsPerPage=10` | Shows image metadata for multiple images | `GET`  | Get a list of images in a form of page with limited number of results |
+| `/resources/res_461087185.jpg`          | Accesses an image as a resource          | `GET`  | Name of a resource, obtainable from /images endpoint.                 |
+
 
 
 <br/>
-
-## Postman
-
-You will find **ImgHub-API.postman_collection.json** included in this repo, you should be able to import it into your application.
-
-Change the input files for uploading and test the API by yourself.
